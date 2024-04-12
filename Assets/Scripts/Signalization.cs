@@ -1,10 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class Signalization : MonoBehaviour
 {
     [SerializeField] private AudioSource _signalization;
+
+    [SerializeField] private Player _player;
 
     [SerializeField] private float _maxVolume = 1.0f;
 
@@ -19,26 +21,29 @@ public class Signalization : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "Player")
+        if (other.gameObject.name == _player.name)
         {
             _signalization.Play();
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.name == "Player")
-        {
-            _signalization.volume = Mathf.MoveTowards(_signalization.volume, _maxVolume, _speed * Time.deltaTime);
+            StartCoroutine(nameof(ChangeVolume));
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.name == "Player")
+        if (other.gameObject.name == _player.name)
         {
             _signalization.Stop();
             _signalization.volume = 0.0f;
+            StopCoroutine(nameof(ChangeVolume));
+        }
+    }
+
+    private IEnumerator ChangeVolume()
+    {
+        while (_signalization.volume != _maxVolume)
+        {
+            _signalization.volume = Mathf.MoveTowards(_signalization.volume, _maxVolume, _speed * Time.deltaTime);
+            yield return null;
         }
     }
 }

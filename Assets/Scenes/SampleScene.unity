@@ -1837,6 +1837,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _signalization: {fileID: 0}
+  _player: {fileID: 308742760}
   _maxVolume: 1
   _speed: 0.05
 --- !u!1 &1908446404
