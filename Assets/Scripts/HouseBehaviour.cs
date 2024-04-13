@@ -7,7 +7,7 @@ public class HouseBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == _player.name)
+        if (other.gameObject.tag == _player.tag)
         {
             _signalization.StartSound();
         }
@@ -15,7 +15,7 @@ public class HouseBehaviour : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.name == _player.name)
+        if (other.gameObject.tag == _player.tag)
         {
             _signalization.StopSound();
         }
