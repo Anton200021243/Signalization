@@ -2,40 +2,30 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-public class Signalization : MonoBehaviour
+public class SignalizationSound : MonoBehaviour
 {
     [SerializeField] private AudioSource _signalization;
 
-    [SerializeField] private Player _player;
-
     [SerializeField] private float _maxVolume = 1.0f;
-
-    [SerializeField] private float _speed = 2.0f;
+    [SerializeField] private float _speed = 0.1f;
 
     private void Start()
     {
         _signalization = GetComponent<AudioSource>();
-
         _signalization.volume = 0.0f;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void StartSound()
     {
-        if (other.gameObject.name == _player.name)
-        {
-            _signalization.Play();
-            StartCoroutine(nameof(ChangeVolume));
-        }
+        _signalization.Play();
+        StartCoroutine(nameof(ChangeVolume));
     }
-
-    private void OnTriggerExit(Collider other)
+    
+    public void StopSound()
     {
-        if (other.gameObject.name == _player.name)
-        {
-            _signalization.Stop();
-            _signalization.volume = 0.0f;
-            StopCoroutine(nameof(ChangeVolume));
-        }
+        _signalization.Stop();
+        _signalization.volume = 0.0f;
+        StopCoroutine(nameof(ChangeVolume));
     }
 
     private IEnumerator ChangeVolume()
