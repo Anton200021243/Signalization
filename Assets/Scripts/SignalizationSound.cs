@@ -7,7 +7,10 @@ public class SignalizationSound : MonoBehaviour
     [SerializeField] private AudioSource _signalization;
 
     [SerializeField] private float _maxVolume = 1.0f;
+    [SerializeField] private float _minVolume = 0.0f;
     [SerializeField] private float _speed = 0.1f;
+
+    private Coroutine _coroutine;
 
     private void Start()
     {
@@ -17,22 +20,36 @@ public class SignalizationSound : MonoBehaviour
 
     public void StartSound()
     {
+        StopRoutine();
         _signalization.Play();
-        StartCoroutine(nameof(ChangeVolume));
+        StartRoutine();
     }
     
     public void StopSound()
     {
-        _signalization.Stop();
-        _signalization.volume = 0.0f;
-        StopCoroutine(nameof(ChangeVolume));
+        StopRoutine();
+        _coroutine = StartCoroutine(ChangeVolume(_minVolume));
     }
 
-    private IEnumerator ChangeVolume()
+    private void StartRoutine()
     {
-        while (_signalization.volume != _maxVolume)
+        _coroutine = StartCoroutine(ChangeVolume(_maxVolume));
+    }
+
+    private void StopRoutine()
+    {
+        if (_coroutine != null)
         {
-            _signalization.volume = Mathf.MoveTowards(_signalization.volume, _maxVolume, _speed * Time.deltaTime);
+            StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
+    }
+
+    private IEnumerator ChangeVolume(float targetVolume)
+    {
+        while (_signalization.volume != targetVolume)
+        {
+            _signalization.volume = Mathf.MoveTowards(_signalization.volume, targetVolume, _speed * Time.deltaTime);
             yield return null;
         }
     }
