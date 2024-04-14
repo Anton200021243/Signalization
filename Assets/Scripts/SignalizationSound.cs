@@ -52,5 +52,8 @@ public class SignalizationSound : MonoBehaviour
             _signalization.volume = Mathf.MoveTowards(_signalization.volume, targetVolume, _speed * Time.deltaTime);
             yield return null;
         }
+
+        if (_signalization.volume == _minVolume)
+            _signalization.Stop();
     }
 }
