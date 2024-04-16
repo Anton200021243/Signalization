@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class HouseBehaviour : MonoBehaviour
 {
-    [SerializeField] private SignalizationSound _signalization;
+    [SerializeField] private Signalization _signalization;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Player>())
+        if (other.TryGetComponent<Player>(out Player player))
         {
             _signalization.StartSound();
         }
@@ -14,7 +14,7 @@ public class HouseBehaviour : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<Player>())
+        if (other.TryGetComponent<Player>(out Player player))
         {
             _signalization.StopSound();
         }

@@ -2,38 +2,39 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-public class SignalizationSound : MonoBehaviour
+public class Signalization : MonoBehaviour
 {
     [SerializeField] private AudioSource _signalization;
 
-    [SerializeField] private float _maxVolume = 1.0f;
-    [SerializeField] private float _minVolume = 0.0f;
     [SerializeField] private float _speed = 0.1f;
+
+    private float _maxVolume = 1.0f;
+    private float _minVolume = 0.0f;
 
     private Coroutine _coroutine;
 
     private void Start()
     {
         _signalization = GetComponent<AudioSource>();
-        _signalization.volume = 0.0f;
+        _signalization.volume = _minVolume;
     }
 
     public void StartSound()
     {
         StopRoutine();
         _signalization.Play();
-        StartRoutine();
+        StartRoutine(_maxVolume);
     }
     
     public void StopSound()
     {
         StopRoutine();
-        _coroutine = StartCoroutine(ChangeVolume(_minVolume));
+        StartRoutine(_minVolume);
     }
 
-    private void StartRoutine()
+    private void StartRoutine(float targetVolume)
     {
-        _coroutine = StartCoroutine(ChangeVolume(_maxVolume));
+        _coroutine = StartCoroutine(ChangeVolume(targetVolume));
     }
 
     private void StopRoutine()
